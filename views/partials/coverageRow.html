@@ -1,0 +1,54 @@
+<td ng-if="cdash.childview == 0" align="left" class="paddt">
+  {{coverage.site}}
+</td>
+
+<td ng-if="cdash.childview == 0" align="left" class="paddt">
+  <a ng-if="coverage.childlink" ng-href="{{coverage.childlink}}">
+    {{coverage.buildname}}
+  </a>
+  <span ng-if="!coverage.childlink">
+    {{coverage.buildname}}
+  </span>
+</td>
+
+<td ng-if="cdash.childview == 1" align="left" class="paddt">
+  <span ng-if="coverage.labels.length == 0">(none)</span>
+  <span ng-if="coverage.labels.length == 1">{{coverage.labels.label}}</span>
+  <span ng-if="coverage.labels.length > 1">({{coverage.labels.length}} labels)</span>
+</td>
+
+<td align="center" ng-class="{'normal': coverage.percentage >= coverage.percentagegreen, 'warning': coverage.percentage < coverage.percentagegreen && coverage.percentage >= coverage.percentageyellow, 'error': coverage.percentage < coverage.percentageyellow}">
+  <a ng-if="coverage.childlink" ng-href="{{coverage.childlink}}">
+    {{coverage.percentage}}
+  </a>
+  <a ng-if="!coverage.childlink" ng-href="viewCoverage.php?buildid={{coverage.buildid}}">
+    {{coverage.percentage}}
+  </a>
+  <sub ng-if="coverage.percentagediff > 0">+{{coverage.percentagediff}}%</sub>
+  <sub ng-if="coverage.percentagediff < 0">{{coverage.percentagediff}}%</sub>
+</td>
+
+<td align="center">
+  {{coverage.pass}}
+  <sub ng-if="coverage.passdiff > 0">+{{coverage.passdiff}}</sub>
+  <sub ng-if="coverage.passdiff < 0">{{coverage.passdiff}}</sub>
+</td>
+
+<td align="center">
+  {{coverage.fail}}
+  <sub ng-if="coverage.faildiff > 0">+{{coverage.faildiff}}</sub>
+  <sub ng-if="coverage.faildiff < 0">{{coverage.faildiff}}</sub>
+</td>
+
+<td align="center" ng-class="{'nob': cdash.displaylabels == 0}">
+  <span class="sorttime" style="display:none">{{coverage.datefull}}</span>
+  <span class="builddateelapsed" alt="{{coverage.date}}">
+    {{coverage.dateelapsed}}
+  </span>
+</td>
+
+<td ng-if="cdash.childview == 0 && cdash.displaylabels == 1" class="nob" align="left">
+  <span ng-if="coverage.labels.length == 0">(none)</span>
+  <span ng-if="coverage.labels.length == 1">{{coverage.labels.label}}</span>
+  <span ng-if="coverage.labels.length > 1">({{coverage.labels.length}} labels)</span>
+</td>

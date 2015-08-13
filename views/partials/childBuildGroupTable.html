@@ -1,0 +1,327 @@
+<!-- TODO: figure out why the view doesn't render if we remove the following line -->
+<!-- <span style="display:none">{{buildgroup.name}} has {{buildgroup.builds.length}} builds</span> -->
+
+<tr ng-if="buildgroup.builds.length == 0" class="table-heading1 table-nobuild">
+  <td colspan="1" class="nob">
+    <h3><a href="#" class="grouptrigger">No {{buildgroup.name}} Builds</a></h3>
+  </td>
+
+  <!-- quick links -->
+  <td align="right" class="nob" colspan=15>
+    <div id="{{buildgroup.linkname}}"></div>
+    <div class="quicklink">
+      <a ng-repeat="bg in cdash.buildgroups" ng-if="bg != buildgroup" href="#{{bg.linkname}}">{{bg.name}}</a> |
+      <a href="#Coverage">Coverage</a> |
+      <a href="#DynamicAnalysis">Dynamic Analysis</a>
+    </div>
+  </td>
+</tr>
+
+<thead ng-if="buildgroup.builds.length > 0">
+  <tr class="table-heading1" >
+    <td colspan="1" class="nob">
+      <h3><a href="#" class="grouptrigger">{{buildgroup.name}}</a></h3>
+    </td>
+
+    <!-- quick links -->
+    <td align="right" class="nob" colspan=15>
+      <div id="{{buildgroup.linkname}}"></div>
+      <div class="quicklink">
+        <a ng-repeat="bg in cdash.buildgroups" ng-if="bg != buildgroup" href="#{{bg.linkname}}">{{bg.name}}</a> |
+        <a href="#Coverage">Coverage</a> |
+        <a href="#DynamicAnalysis">Dynamic Analysis</a>
+      </div>
+    </td>
+  </tr>
+
+  <tr class="table-heading">
+
+    <th align="center" rowspan="2" width="5%" style="cursor: pointer" ng-click="buildgroup.orderByField='Labels'; buildgroup.reverseSort = !buildgroup.reverseSort">
+      SubProject
+      <span class="glyphicon" ng-class="{'glyphicon-none': buildgroup.orderByField != 'Labels', 'glyphicon-chevron-down': !buildgroup.reverseSort, 'glyphicon-chevron-up': buildgroup.reverseSort}"></span>
+    </th>
+
+    <td align="center" colspan="{{1 + cdash.advancedview}}" width="5%" class="timeheader botl">Update</td>
+    <td align="center" colspan="{{2 + cdash.advancedview}}" width="10%" class="timeheader botl">Configure</td>
+    <td align="center" colspan="{{2 + cdash.advancedview}}" width="10%" class="timeheader botl">Build</td>
+    <td align="center" colspan="{{3 +  + cdash.advancedview}}" width="15%" class="timeheader botl">Test</td>
+    <td align="center" width="20%" class="timeheader botl"></td>
+  </tr>
+
+  <tr class="table-heading">
+    <th align="center" width="3%" style="cursor: pointer" ng-click="buildgroup.orderByField='update.files'; buildgroup.reverseSort = !buildgroup.reverseSort">
+      Files
+      <span class="glyphicon" ng-class="{'glyphicon-none': buildgroup.orderByField != 'update.files', 'glyphicon-chevron-down': !buildgroup.reverseSort, 'glyphicon-chevron-up': buildgroup.reverseSort}"></span>
+    </th>
+
+    <th ng-show="cdash.advancedview != 0" align="center" width="5%" style="cursor: pointer" ng-click="buildgroup.orderByField='update.timefull'; buildgroup.reverseSort = !buildgroup.reverseSort">
+      Time
+      <span class="glyphicon" ng-class="{'glyphicon-none': buildgroup.orderByField != 'update.timefull', 'glyphicon-chevron-down': !buildgroup.reverseSort, 'glyphicon-chevron-up': buildgroup.reverseSort}"></span>
+    </th>
+
+    <th align="center" style="cursor: pointer" ng-click="buildgroup.orderByField='configure.error'; buildgroup.reverseSort = !buildgroup.reverseSort">
+      Error
+      <span class="glyphicon" ng-class="{'glyphicon-none': buildgroup.orderByField != 'configure.error', 'glyphicon-chevron-down': !buildgroup.reverseSort, 'glyphicon-chevron-up': buildgroup.reverseSort}"></span>
+    </th>
+
+    <th align="center" style="cursor: pointer" ng-click="buildgroup.orderByField='configure.warning'; buildgroup.reverseSort = !buildgroup.reverseSort">
+      Warn
+      <span class="glyphicon" ng-class="{'glyphicon-none': buildgroup.orderByField != 'configure.warning', 'glyphicon-chevron-down': !buildgroup.reverseSort, 'glyphicon-chevron-up': buildgroup.reverseSort}"></span>
+    </th>
+
+    <th ng-show="cdash.advancedview != 0" align="center" width="5%" style="cursor: pointer" ng-click="buildgroup.orderByField='configure.timefull'; buildgroup.reverseSort = !buildgroup.reverseSort">
+      Time
+      <span class="glyphicon" ng-class="{'glyphicon-none': buildgroup.orderByField != 'configure.timefull', 'glyphicon-chevron-down': !buildgroup.reverseSort, 'glyphicon-chevron-up': buildgroup.reverseSort}"></span>
+    </th>
+
+    <th align="center" style="cursor: pointer" ng-click="buildgroup.orderByField='compilation.error'; buildgroup.reverseSort = !buildgroup.reverseSort">
+      Error
+      <span class="glyphicon" ng-class="{'glyphicon-none': buildgroup.orderByField != 'compilation.error', 'glyphicon-chevron-down': !buildgroup.reverseSort, 'glyphicon-chevron-up': buildgroup.reverseSort}"></span>
+    </th>
+
+    <th align="center" style="cursor: pointer" ng-click="buildgroup.orderByField='compilation.warning'; buildgroup.reverseSort = !buildgroup.reverseSort">
+      Warn
+      <span class="glyphicon" ng-class="{'glyphicon-none': buildgroup.orderByField != 'compilation.warning', 'glyphicon-chevron-down': !buildgroup.reverseSort, 'glyphicon-chevron-up': buildgroup.reverseSort}"></span>
+    </th>
+
+    <th ng-show="cdash.advancedview != 0" align="center" width="5%" style="cursor: pointer" ng-click="buildgroup.orderByField='compilation.timefull'; buildgroup.reverseSort = !buildgroup.reverseSort">
+      Time
+      <span class="glyphicon" ng-class="{'glyphicon-none': buildgroup.orderByField != 'compilation.timefull', 'glyphicon-chevron-down': !buildgroup.reverseSort, 'glyphicon-chevron-up': buildgroup.reverseSort}"></span>
+    </th>
+
+    <th align="center" width="5%" style="cursor: pointer" ng-click="buildgroup.orderByField='test.notrun'; buildgroup.reverseSort = !buildgroup.reverseSort">
+      Not Run
+      <span class="glyphicon" ng-class="{'glyphicon-none': buildgroup.orderByField != 'test.notrun', 'glyphicon-chevron-down': !buildgroup.reverseSort, 'glyphicon-chevron-up': buildgroup.reverseSort}"></span>
+    </th>
+
+    <th align="center" width="5%" style="cursor: pointer" ng-click="buildgroup.orderByField='test.fail'; buildgroup.reverseSort = !buildgroup.reverseSort">
+      Fail
+      <span class="glyphicon" ng-class="{'glyphicon-none': buildgroup.orderByField != 'test.fail', 'glyphicon-chevron-down': !buildgroup.reverseSort, 'glyphicon-chevron-up': buildgroup.reverseSort}"></span>
+    </th>
+
+    <th align="center" width="5%" style="cursor: pointer" ng-click="buildgroup.orderByField='test.pass'; buildgroup.reverseSort = !buildgroup.reverseSort">
+      Pass
+      <span class="glyphicon" ng-class="{'glyphicon-none': buildgroup.orderByField != 'test.pass', 'glyphicon-chevron-down': !buildgroup.reverseSort, 'glyphicon-chevron-up': buildgroup.reverseSort}"></span>
+    </th>
+
+    <th ng-show="cdash.advancedview != 0" align="center" width="5%" style="cursor: pointer" ng-click="buildgroup.orderByField='test.timefull'; buildgroup.reverseSort = !buildgroup.reverseSort">
+      Time
+      <span class="glyphicon" ng-class="{'glyphicon-none': buildgroup.orderByField != 'test.timefull', 'glyphicon-chevron-down': !buildgroup.reverseSort, 'glyphicon-chevron-up': buildgroup.reverseSort}"></span>
+    </th>
+
+    <th align="center" width="20%" style="cursor: pointer" ng-click="buildgroup.orderByField='builddatefull'; buildgroup.reverseSort = !buildgroup.reverseSort">
+      Build Time
+      <span class="glyphicon" ng-class="{'glyphicon-none': buildgroup.orderByField != 'builddatefull', 'glyphicon-chevron-down': !buildgroup.reverseSort, 'glyphicon-chevron-up': buildgroup.reverseSort}"></span>
+    </th>
+ </tr>
+</thead>
+
+<tbody ng-if="buildgroup.builds.length > 0">
+  <tr ng-repeat="build in buildgroup.builds |orderBy:buildgroup.orderByField:buildgroup.reverseSort|showExpectedLast" ng-class-odd="'odd'" ng-class-even="'even'" valign="middle">
+
+    <!-- display the label(s) as a link to the build summary -->
+    <td align="left" class="paddt">
+      <span ng-if="build.labels.length == 0">(none)</span>
+      <div ng-if="build.labels.length == 1">
+        <a ng-href="buildSummary.php?buildid={{build.id}}">
+          {{build.labels[0]}}
+        </a>
+      </div>
+      <span ng-if="build.labels.length > 1">({{build.labels.length}} labels)</span>
+      <!-- Icon for build errors / test failing -->
+      <a ng-if="build.compilation.error > 0 || build.test.fail > 0" href="javascript:;" ng-click="buildinfo_click(build.id)">
+        <img src="images/Info.png" alt="info" class="icon"></img>
+      </a>
+      <div ng-if="build.id" id="buildgroup_{{build.id}}"></div>
+    </td>
+
+    <td align="center" ng-class="{'error': build.update.errors == 1, 'warning': build.update.warning == 1, 'normal': build.update.defined == 1}">
+      <div ng-if="build.numchildren == 0">
+        <img ng-if="build.userupdates > 0" src="images/yellowled.png" height="10px" alt="star" title="I checked in some code for this build!"/> 
+        <a ng-href="viewUpdate.php?buildid={{build.id}}">
+          {{build.update.files}}
+        </a>
+      </div>
+
+      <div ng-if="build.numchildren != 0">
+        {{build.update.files}}
+      </div>
+    </td>
+
+    <td align="right" ng-show="cdash.advancedview != 0" ng-show="cdash.advancedview != 0">
+      <span class="sorttime" style="display:none">sorttime={{build.update.timefull}}#</span>
+      {{build.update.time}}
+    </td>
+
+    <td align="center" ng-class="{'error': build.configure.error > 0, 'normal': build.configure.error == 0}">
+      <a ng-if="build.numchildren == 0" ng-href="viewConfigure.php?buildid={{build.id}}">
+        {{build.configure.error}}
+      </a>
+      <div ng-if="build.numchildren != 0">
+        {{build.configure.error}}
+      </div>
+      <!-- TODO: placeholder space when no configure info (relevant in other places too
+      <xsl:if test="string-length(configure/error)=0"><xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text></xsl:if>
+      -->
+    </td>
+
+    <td align="center" ng-class="{'warning': build.configure.warning > 0, 'normal': build.configure.warning.length > 0}">
+      <xsl:if test="build.numchildren == 0">
+      <a ng-if="build.numchildren == 0" ng-href="viewConfigure.php?buildid={{build.id}}">
+        {{build.configure.warning}}
+      </a>
+      <div ng-if="build.numchildren != 0">
+        {{build.configure.warning}}
+      </div>
+      <!-- placeholder space here too -->
+      <sub ng-if="build.numchildren == 0 && build.configure.nwarningdiff > 0">+{{build.configure.nwarningdiff}}</sub>
+      <sub ng-if="build.numchildren == 0 && build.configure.nwarningdiff < 0">{{build.configure.nwarningdiff}}</sub>
+    </td>
+
+    <td align="center" ng-show="cdash.advancedview != 0">
+      <span class="sorttime" style="display:none">sorttime={{build.configure.timefull}}#</span>
+      {{build.configure.time}}
+      <!-- here too -->
+    </td>
+
+    <td align="center" ng-class="{'error': build.compilation.error > 0, 'normal': build.compilation.error}">
+      <div ng-class="{'valuewithsub': build.compilation.nerrordiffp > 0 || build.compilation.nerrordiffn > 0}">
+        <a ng-if="build.numchildren == 0" ng-href="viewBuildError.php?buildid={{build.id}}">
+          {{build.compilation.error}}
+        </a>
+        <div ng-if="build.numchildren != 0">
+          {{build.compilation.error}}
+        </div>
+        <!-- here too -->
+        <a ng-if="build.numchildren == 0 && build.compilation.nerrordiffp > 0" class="sup" ng-href="viewBuildError.php?onlydeltap&buildid={{build.id}}">
+          +{{build.compilation.nerrordiffp}}
+        </a>
+
+        <a ng-if="build.numchildren == 0 && build.compilation.nerrordiffn > 0" ng-href="viewBuildError.php?onlydeltan&buildid={{build.id}}">
+          <span class="sub">-{{build.compilation.nerrordiffn}}</span>
+        </a>
+      </div>
+    </td>
+
+    <td align="center" ng-class="{'warning': build.compilation.warning > 0, 'normal': build.compilation.warning}">
+      <div ng-class="{'valuewithsub': build.compilation.nwarningdiffp > 0 || build.compilation.nwarningdiffn > 0}">
+        <a ng-if="build.numchildren == 0" ng-href="viewBuildError.php?type=1&buildid={{build.id}}">
+          {{build.compilation.warning}}
+        </a>
+        <div ng-if="build.numchildren != 0">
+          {{build.compilation.warning}}
+        </div>
+        <!-- here too -->
+
+        <a ng-if="build.compilation.nwarningdiffp > 0 && build.numchildren == 0" class="sup" ng-href="viewBuildError.php?type=1&onlydeltap&buildid={{build.id}}">
+          +{{build.compilation.nwarningdiffp}}
+        </a>
+        <a ng-if="build.compilation.nwarningdiffn > 0 && numchildren == 0" ng-href="viewBuildError.php?type=1&onlydeltan&buildid={{build.id}}">
+          <span class="sub">-{{build.compilation.nwarningdiffn}}</span>
+        </a>
+      </div>
+    </td>
+
+    <td align="center" ng-show="cdash.advancedview != 0">
+      <span class="sorttime" style="display:none">sorttime={{build.compilation.timefull}}#</span>
+      {{build.compilation.time}}
+      <!-- here too -->
+    </td>
+
+    <td align="center" ng-class="{'warning': build.test.notrun > 0, 'normal': build.test.notrun == 0}">
+      <div ng-class="{'valuewithsub': build.test.nnotrundiffp > 0 || build.test.nnotrundiffn > 0}">
+        <a ng-if="build.numchildren == 0" ng-href="viewTest.php?onlynotrun&buildid={{build.id}}">
+          {{build.test.notrun}}
+        </a>
+        <span ng-if="build.numchildren != 0">{{build.test.notrun}}</span>
+        <!-- here too -->
+        <a ng-if="build.test.nnotrundiffp > 0 && build.numchildren == 0" class="sup" ng-href="viewTest.php?onlydelta&buildid={{build.id}}">
+          +{{build.test.nnotrundiffp}}
+        </a>
+        <span ng-if="build.test.nnotrundiffn > 0 && build.numchildren == 0" class="sub">-{{build.test.nnotrundiffn}}</span>
+      </div>
+    </td>
+
+    <td align="center" ng-class="{'error': build.test.fail > 0, 'normal': build.test.fail < 1}">
+      <div ng-class="{'valuewithsub': build.test.nfaildiffp > 0 || build.test.nfaildiffn > 0}">
+        <a ng-if="build.numchildren == 0" ng-href="viewTest.php?onlyfailed&buildid={{build.id}}">
+          {{build.test.fail}}
+        </a>
+        <span ng-if="build.numchildren != 0">{{build.test.fail}}</span>
+        <!-- here too -->
+        <a ng-if="build.test.nfaildiffp > 0 && build.numchildren == 0" class="sup" ng-href="viewTest.php?onlydelta&buildid={{build.id}}">
+          +{{build.test.nfaildiffp}}
+        </a>
+        <span ng-if="build.test.nfaildiffn > 0 && build.numchildren == 0" class="sub">
+          -{{build.test.nfaildiffn}}
+        </span>
+      </div>
+    </td>
+
+    <td align="center" ng-class="{'normal': build.test.pass}">
+      <div ng-class="{'valuewithsub': build.test.npassdiffp > 0 || build.test.npassdiffn > 0}">
+        <a ng-if="build.numchildren == 0" ng-href="viewTest.php?onlypassed&buildid={{build.id}}">
+          {{build.test.pass}}
+        </a>
+        <span ng-if="build.numchildren != 0">
+          {{build.test.pass}}
+        <span>
+        <!-- here too -->
+        <a ng-if="build.test.npassdiffp > 0 && build.numchildren == 0" class="sup" ng-href="viewTest.php?onlydelta&buildid={{build.id}}">
+          +{{build.test.npassdiffp}}
+        </a>
+
+        <span ng-if="build.test.npassdiffn > 0 && build.numchildren == 0" class="sub">
+          -{{build.test.npassdiffn}}
+        </span>
+      </div>
+    </td>
+
+    <td align="center" ng-show="cdash.advancedview != 0" ng-class="{'error': build.test.timestatus > 0, 'normal': build.test.timestatus}">
+      <span ng-if="!build.test.timestatus" class="sorttime" style="display:none">sorttime={{build.test.timefull}}#</span>
+      <div ng-class="{'valuewithsub': build.build.test.ntimediffp > 0 || build.test.ntimediffn > 0}">
+        <div ng-if="build.test.timestatus > 0">
+          <a ng-href="viewTest.php?onlytimestatus&buildid={{build.id}}">
+            {{build.test.timestatus}}
+          </a>
+          <a ng-if="build.test.ntimediffp > 0" class="sup" ng-href="viewTest.php?onlydelta&buildid={{build.id}}">
+            +{{build.test.ntimediffp}}
+          </a>
+          <span ng-if="build.test.ntimediffn > 0" class="sub">
+            -{{build.test.ntimediffn}}
+          </span>
+        </div>
+
+        <span ng-if="build.test.timestatus">
+          {{build.test.time}}
+          <!-- here too -->
+          <a ng-if="build.test.ntimediffp > 0 && build.numchildren == 0" class="sup" ng-href="viewTest.php?onlydelta&buildid={{buildid}}">
+            +{{build.test.ntimediffp}}
+          </a>
+          <xsl:if test="">
+          <span ng-if="build.test.ntimediffn > 0 && build.numchildren == 0" class="sub">
+            -{{build.test.ntimediffn}}
+          </span>
+        </span>
+
+        <span ng-if="!build.test.timestatus">
+          {{build.test.time}}
+          <!-- here too -->
+        </span>
+      </div>
+    </td>
+
+    <td align="center">
+      <span ng-if="!build.builddate" class="builddateelapsed" alt="Expected submit time: {{build.expectedstarttime}}">
+        Expected build
+      </span>
+
+      <div ng-if="build.builddate">
+        <span class="sorttime" style="display:none">sorttime={{build.builddatefull}}#</span>
+        <span class="builddateelapsed" title="{{build.builddate}}, Update time: {{build.update.time}}, Configure time: {{build.configure.time}}, Compilation time: {{build.compilation.time}}, Test time: {{build.test.time}}">
+          {{build.builddateelapsed}}
+        </span>
+      </div>
+    </td>
+  </tr>
+</tbody>

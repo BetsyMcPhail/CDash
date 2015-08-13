@@ -19,7 +19,7 @@
 
     <div id="datetime"> {{cdash.datetime}} </div>
     <div id="feedicon" alt="RSS Feed" title="RSS Feed">
-      <a ng-if="cdash.projectpublic==1" href="rss/SubmissionRSS{{cdash.projectname}}.xml">
+      <a ng-if="cdash.public==1" href="rss/SubmissionRSS{{cdash.projectname}}.xml">
         <img src="images/feed-icon16x16.png" alt="RSS" width="14" height="14" border="0" />
       </a>
     </div>
@@ -45,6 +45,11 @@
             Dashboard
           </a>
           <ul>
+            <li ng-if="cdash.menu.subprojects == 1">
+              <a href="viewSubProjects.php?project={{cdash.projectname_encoded}}&date={{cdash.date}}">
+                SubProjects
+              </a>
+            </li>
             <li>
               <a href="overview.php?project={{cdash.projectname_encoded}}&date={{cdash.date}}">
                 Overview
@@ -86,13 +91,12 @@
           <a href="{{cdash.menu.back}}">Back</a>
         </li>
         <li>
-          <a id="cal" href="#">Calendar</a>
+          <a id="cal" href="javascript:;" ng-click="toggleCalendar()">Calendar</a>
           <span id="date_now" style="display:none;">{{cdash.date}}</span>
         </li>
-
         <li>
-          <a ng-if="cdash.previous" href="{{cdash.menu.previous}}">Previous</a>
-          <a ng-if="cdash.noprevious" href="index.php?project={{cdash.projectname_encoded}}&date={{cdash.previousdate}}{{cdash.extraurl}}">
+          <a ng-if="cdash.menu.previous" href="{{cdash.menu.previous}}">Previous</a>
+          <a ng-if="!cdash.menu.previous && !cdash.menu.noprevious" href="index.php?project={{cdash.projectname_encoded}}&date={{cdash.previousdate}}{{cdash.extraurl}}">
             Previous
           </a>
         </li>
@@ -122,7 +126,7 @@
               <a href="{{cdash.documentation}}">Documentation</a>
             </li>
             <li>
-              <a href="{{cdash.svn}}">Repository</a>
+              <a href="{{cdash.vcs}}">Repository</a>
             </li>
             <li ng-class="{endsubmenu: cdash.projectrole}">
               <a href="{{cdash.bugtracker}}">Bug Tracker</a>
@@ -132,7 +136,7 @@
             </li>
           </ul>
         </li>
-        <li ng-if="cdash.admin" id="admin">
+        <li ng-if="cdash.user.admin" id="admin">
           <a href="#">Settings</a>
           <ul>
             <li>

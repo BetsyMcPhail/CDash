@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="favicon.ico" />
     <link rel="stylesheet" type="text/css" ng-href="{{cssfile}}" />
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
-    <title>{{cdash.title || "CDash : View test"}}</title>
+    <title ng-bind="title">CDash</title>
 
     <script src="javascript/jquery-1.10.2.js"></script>
     <script src="javascript/jquery-ui-1.10.4.min.js"></script>
@@ -26,7 +26,7 @@
   </head>
 
   <body bgcolor="#ffffff" ng-controller="ViewTestController">
-    <ng-include src="'views/header.html'"></ng-include>
+    <ng-include src="'views/partials/header.html'"></ng-include>
     <br/>
 
     <div ng-if="cdash.requirelogin == 1">
@@ -124,7 +124,13 @@
       </table>
 
       <!-- Filters -->
-      <ng-include src="'views/filterdataTemplate.html'"></ng-include>
+      <div id="labelshowfilters">
+        <a id="label_showfilters" ng-click="showfilters=!showfilters">
+          <span ng-if="showfilters">Hide Filters</span>
+          <span ng-if="!showfilters">Show Filters</span>
+        </a>
+      </div>
+      <ng-include src="'views/partials/filterdataTemplate.html'"></ng-include>
 
       <div ng-switch="cdash.display">
         <h3 ng-switch-when="onlypassed">{{cdash.numPassed}} tests passed.</h3>
@@ -236,6 +242,6 @@
 
     <!-- FOOTER -->
     <br/>
-    <ng-include src="'views/footer.html'"></ng-include>
+    <ng-include src="'views/partials/footer.html'"></ng-include>
   </body>
 </html>
