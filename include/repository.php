@@ -869,6 +869,8 @@ function perform_github_version_only_diff($project, $update, $previous_revision)
         }
     }
 
+    $auth = ['auth' => ['drake-jenkins-bot', '7rJjdE6=Zg!{6NE!KHH6Emsh"cTn,L<b']];
+
     // Connect to memcache.
     if ($CDASH_MEMCACHE_ENABLED) {
         list($server, $port) = $CDASH_MEMCACHE_SERVER;
