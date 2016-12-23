@@ -536,6 +536,16 @@ function curl_request_async($url, $params, $type = 'POST')
 
     $fp = fsockopen($scheme . $parts['host'], $port, $errno, $errstr, 30);
 
+    if ($errno != 0) {
+      add_log('Error '.$errno.': '.$errstr, 'curl_request_async', LOG_ERR);
+      return;
+    }
+
+    if ($fp === false) {
+      add_log('Could not open socket '.$scheme.$parts['host'].':'.$port, 'curl_request_async', LOG_ERR);
+      return;
+    }
+
     // Data goes in the path for a GET request
     if ('GET' == $type) {
         $parts['path'] .= '?' . $post_string;

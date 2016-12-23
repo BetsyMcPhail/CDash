@@ -54,4 +54,4 @@ $factory = new PersistentFactory($CDASH_BERNARD_DRIVER, new Serializer());
 
 // Create a Consumer and start the loop.
 $consumer = new Consumer($router, new EventDispatcher());
-$consumer->consume($factory->create('do-submit'));
+$consumer->consume($factory->create('drake-cdash'));

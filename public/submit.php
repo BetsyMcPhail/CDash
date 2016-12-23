@@ -119,7 +119,7 @@ if ($CDASH_BERNARD_SUBMISSION) {
             'expected_md5' => $expected_md5,
             'do_checksum' => true,
             'submission_id' => 0, // The submit endpoint does not allow a submission_id
-            'submission_ip' => $_SERVER['REMOTE_ADDR'])));
+            'submission_ip' => $_SERVER['REMOTE_ADDR'])), 'drake-cdash');
         echo '<cdash version="' . $CDASH_VERSION . "\">\n";
         echo " <status>OK</status>\n";
         echo " <message>Build submitted successfully.</message>\n";
