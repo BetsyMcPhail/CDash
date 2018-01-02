@@ -42,6 +42,7 @@ class UploadHandler extends AbstractHandler
     private $TmpFilename;
     private $Base64TmpFileWriteHandle;
     private $Base64TmpFilename;
+    private $Label;
 
     /** If True, means an error happened while processing the file */
     private $UploadError;
@@ -193,6 +194,8 @@ class UploadHandler extends AbstractHandler
                 $this->UploadError = true;
                 return;
             }
+        } elseif ($name == 'LABEL') {
+            $this->Label = new Label();
         }
     }
 
@@ -353,6 +356,8 @@ class UploadHandler extends AbstractHandler
 
             // Reset UploadError so that the handler could attempt to process following files
             $this->UploadError = false;
+        } elseif ($name == 'LABEL') {
+            $this->Build->AddLabel($this->Label);
         }
     }
 
@@ -374,6 +379,8 @@ class UploadHandler extends AbstractHandler
                     fwrite($this->Base64TmpFileWriteHandle, str_replace($charsToReplace, '', $data));
                     break;
             }
+        } elseif ($element == 'LABEL') {
+            $this->Label->SetText($data);
         }
     }
 }
