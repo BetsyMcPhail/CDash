@@ -27,6 +27,10 @@ use CDash\Model\Project;
 use CDash\Model\Site;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
+use CDash\Middleware\Queue\SubmissionService;
+use CDash\Middleware\Queue;
+use CDash\Middleware\Queue\DriverFactory as QueueDriverFactory;
+
 include 'include/ctestparser.php';
 include_once 'include/common.php';
 include_once 'include/createRSS.php';
@@ -106,6 +110,29 @@ function curl_request($request)
         return false;
     }
     return true;
+}
+
+function do_submit_test($fileHandleOrSubmissionId, $destinationFilename, $projectid, $expected_md5 = '', $do_checksum = true,
+                   $submission_id = 0)
+{
+    if (rand(0, 1) > 0)
+      {
+      add_log('---> Requeue!!!', 'do_submit.php', LOG_WARNING);
+      $driver = QueueDriverFactory::create();
+      $queue = new Queue($driver);
+      $message = SubmissionService::createMessage([
+          'file' => $destinationFilename,
+          'project' => $projectid,
+          'md5' => $expected_md5,
+          'checksum' => true,
+      ]);
+      $queue->produce($message);
+      }
+    else
+      {
+      add_log('---> Do submit', 'do_submit.php', LOG_WARNING);
+      do_submit($fileHandleOrSubmissionId, $projectid, $expected_md5, $do_checksum, $submission_id);
+      }
 }
 
 /**
@@ -475,7 +502,7 @@ function put_submit_file()
         $factory = new PersistentFactory($config->get('CDASH_BERNARD_DRIVER'), new Serializer());
         $producer = new Producer($factory, new EventDispatcher());
 
-        $producer->produce(new DefaultMessage('DoSubmit', array(
+        $producer->produce(new DefaultMessage('CtestEnd', array(
             'coverage_submission' => true,
             'filename' => $filename,
             'expected_md5' => $md5sum,

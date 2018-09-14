@@ -80,7 +80,7 @@ use CDash\Middleware\Queue;
 class SubmissionService
 {
     /** @var string - The name of this service */
-    const NAME = 'DoSubmit';
+    const NAME = 'CtestEnd';
 
     /** @var string[] - Fields required for processing */
     protected static $required = ['file', 'project', 'checksum', 'md5'];
@@ -134,7 +134,7 @@ class SubmissionService
     public function __call($name, $arguments)
     {
         if ($name === lcfirst($this->queueName)) {
-            $this->doSubmit($arguments[0]);
+            $this->ctestEnd($arguments[0]);
         }
     }
 
@@ -163,11 +163,11 @@ class SubmissionService
      * @return void
      * @throws \Exception
      */
-    public function doSubmit(Message $message)
+    public function ctestEnd(Message $message)
     {
         try {
             $fh = fopen($message->file, 'r');
-            do_submit($fh, $message->project, $message->md5, $message->checksum);
+            do_submit_test($fh, $message->file, $message->project, $message->md5, $message->checksum);
         } catch (\Exception $e) {
             Log::getInstance()->error($e);
             throw $e;
